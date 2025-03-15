@@ -9,27 +9,14 @@ This surface is mainly studied in **differential geometry** and **mathematical v
 
 ### **Understanding the Equation in the Code**  
 
-The equation used in the code to define the **Ghost Plane Surface** is:  
+The equation used in this code to define the **Ghost Plane Surface** is:  
 
-\[
-x = \frac{\cos(u) \sinh(v)}{\cosh(v) - \cos(u)}
-\]
-
-\[
-y = \frac{\cos(u) \sin(u)}{\cosh(v) - \cos(u)}
-\]
-
-\[
-z = \sin(u)
-\]
+![Image](https://github.com/user-attachments/assets/987fafcc-35dc-4188-b24c-671d0efb02ec)
 
 #### **Breaking it Down:**
-1. **Parametric Variables \( u \) and \( v \):**  
-   - The equation defines a **parametric surface**, meaning that every point \((x, y, z)\) depends on two input variables: \( u \) and \( v \).  
-   - These variables are mapped to a range:  
-     \[
-     -\pi \leq u \leq \pi, \quad -\pi \leq v \leq \pi
-     \]
+1. **Parametric Variables \( u \) and \( v \):**
+
+ ![Image](https://github.com/user-attachments/assets/fbcc5a0f-0fc1-463d-b143-bd3136cd7d22)
   
 2. **Hyperbolic and Trigonometric Functions:**  
    - \( cosh(v) \) and \( sinh(v) \) are **hyperbolic functions**, similar to cosine and sine but defined for exponential growth and decay.
@@ -41,8 +28,8 @@ z = \sin(u)
   
 4. **Behavior of Each Coordinate:**  
    - **\( x \)-coordinate:** Involves a mix of cosine and hyperbolic sine, producing the surface’s **expanding and looping** behavior.  
-   - **\( y \)-coordinate:** Contains a product of \( \cos(u) \) and \( \sin(u) \), influencing the **twisting motion** of the surface.  
-   - **\( z \)-coordinate:** Defined purely by **\( \sin(u) \)**, which determines the **vertical oscillation** of the surface.
+   - **\( y \)-coordinate:** Contains a product of \( cos(u) \) and \( sin(u) \), influencing the **twisting motion** of the surface.  
+   - **\( z \)-coordinate:** Defined purely by **\( sin(u) \)**, which determines the **vertical oscillation** of the surface.
 
 ---
 
