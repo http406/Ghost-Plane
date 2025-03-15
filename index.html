@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghost Plane</title>
+    <style>
+        body { margin: 0; 
+        background-color: black; 
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        height: 100vh;
+        margin: 0; 
+        outline: none;
+        background: #000;
+        -webkit-tap-highlight-color: transparent;
+        }
+        canvas { display: block; }
+        #infoButton {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 20px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .info-popup {
+            display: none;
+            position: absolute;
+            top: 40px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            width: 300px;
+            text-align: left;
+            user-select: none;
+            font-size: 14px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <button id="infoButton">&#9432;</button>
+    <div class="info-popup" id="infoPopup">
+        <p style="text-align:center;" ><strong>Ghost Plane</strong></p>
+    <p style="color:pink; text-align: center;">The Ghost Plane is a fascinating 3D parametric surface that emerges from mathematical transformations involving hyperbolic and trigonometric functions. It appears as a complex and mesmerizing structure, resembling ghostly, intertwined loops. The shape arises from a carefully constructed equation that maps a two-dimensional domain ( 𝑢, 𝑣 ) onto a three-dimensional surface. This surface is mainly studied in differential geometry and mathematical visualization, where it exhibits interesting properties such as singularities and self-intersections.</p>
+            <p style="text-align:center;">For Equations visit my Github. Enjoy!</p>
+    </div>
+</head>
+<body>
+    <script>
+        // Scene setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Create stars background
+        function createStars() {
+            const starsGeometry = new THREE.BufferGeometry();
+            const starsCount = 1000;
+            const positions = [];
+            const colors = [];
+            const color = new THREE.Color();
+
+            for (let i = 0; i < starsCount; i++) {
+                const x = (Math.random() - 0.5) * 200;
+                const y = (Math.random() - 0.5) * 200;
+                const z = (Math.random() - 0.5) * 200;
+                positions.push(x, y, z);
+
+                color.setHSL(Math.random(), 1.0, 0.7);
+                colors.push(color.r, color.g, color.b);
+            }
+
+            starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+            starsGeometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+            
+            const starsMaterial = new THREE.PointsMaterial({ size: 0.15, vertexColors: true });
+            const stars = new THREE.Points(starsGeometry, starsMaterial);
+            scene.add(stars);
+        }
+        createStars();
+
+        // Parametric surface function
+        function ghostPlaneSurface(u, v, target) {
+            u = u * Math.PI * 2 - Math.PI;
+            v = v * Math.PI * 2 - Math.PI;
+            
+            const denom = Math.cosh(v) - Math.cos(u);
+            if (Math.abs(denom) < 9e-2) {
+                target.set(0, 0, 0);
+                return;
+            }
+
+            const x = (Math.cos(u) * Math.sinh(v)) / denom;
+            const y = (Math.cos(u) * Math.sin(u)) / denom;
+            const z = Math.sin(u);
+
+            target.set(x, y, z);
+        }
+
+        // Create geometry & material
+        const geometry = new THREE.ParametricGeometry(ghostPlaneSurface, 150, 150);
+        const material = new THREE.MeshBasicMaterial({ vertexColors: true, wireframe: true });
+        
+        // Add rainbow colors
+        const colors = [];
+        const color = new THREE.Color();
+        for (let i = 0; i < geometry.attributes.position.count; i++) {
+            color.setHSL(i / geometry.attributes.position.count, 1.0, 0.5);
+            colors.push(color.r, color.g, color.b);
+        }
+        geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+        
+        const ghostPlane = new THREE.Mesh(geometry, material);
+        ghostPlane.position.set(0, 0, 0);
+        scene.add(ghostPlane);
+
+        // Camera position
+        camera.position.set(0, 0, 12);
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            ghostPlane.rotation.x += 0.005;
+            ghostPlane.rotation.y += 0.005;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Handle window resizing
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+        
+         $("#infoButton").click(function() {
+            $("#infoPopup").fadeToggle();
+        });
+    </script>
+</body>
+      </html>
+  
